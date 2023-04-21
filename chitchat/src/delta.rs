@@ -278,7 +278,7 @@ mod tests {
     }
     #[test]
     fn test_delta_serialization_simple() {
-        let mut delta_writer = DeltaWriter::with_mtu(154);
+        let mut delta_writer = DeltaWriter::with_mtu(168);
         delta_writer.add_node(ChitchatId::for_local_test(10_001));
         assert!(delta_writer.add_kv(
             "key11",
@@ -314,12 +314,12 @@ mod tests {
             },
         ));
         let delta: Delta = delta_writer.into();
-        test_serdeser_aux(&delta, 154);
+        test_serdeser_aux(&delta, 168);
     }
 
     #[test]
     fn test_delta_serialization_simple_node() {
-        let mut delta_writer = DeltaWriter::with_mtu(118);
+        let mut delta_writer = DeltaWriter::with_mtu(132);
         assert!(delta_writer.add_node(ChitchatId::for_local_test(10_001)));
         assert!(delta_writer.add_kv(
             "key11",
@@ -339,12 +339,12 @@ mod tests {
         ));
         assert!(delta_writer.add_node(ChitchatId::for_local_test(10_002)));
         let delta: Delta = delta_writer.into();
-        test_serdeser_aux(&delta, 108);
+        test_serdeser_aux(&delta, 122);
     }
 
     #[test]
     fn test_delta_serialization_simple_with_nodes_to_reset() {
-        let mut delta_writer = DeltaWriter::with_mtu(136);
+        let mut delta_writer = DeltaWriter::with_mtu(156);
         assert!(delta_writer.add_node_to_reset(ChitchatId::for_local_test(10_000))); // Chitchat ID takes 27 bytes
         assert!(delta_writer.add_node(ChitchatId::for_local_test(10_001)));
         assert!(delta_writer.add_kv(
@@ -365,7 +365,7 @@ mod tests {
         ));
         assert!(delta_writer.add_node(ChitchatId::for_local_test(10_002)));
         let delta: Delta = delta_writer.into();
-        test_serdeser_aux(&delta, 135);
+        test_serdeser_aux(&delta, 156);
     }
 
     #[test]
@@ -390,7 +390,7 @@ mod tests {
         ));
         assert!(!delta_writer.add_node(ChitchatId::for_local_test(10_002)));
         let delta: Delta = delta_writer.into();
-        test_serdeser_aux(&delta, 79);
+        test_serdeser_aux(&delta, 86);
     }
 
     #[test]
@@ -415,7 +415,7 @@ mod tests {
         ));
         assert!(!delta_writer.add_node_to_reset(ChitchatId::for_local_test(10_002)));
         let delta: Delta = delta_writer.into();
-        test_serdeser_aux(&delta, 79);
+        test_serdeser_aux(&delta, 86);
     }
 
     #[test]
@@ -439,7 +439,7 @@ mod tests {
             }
         ));
         let delta: Delta = delta_writer.into();
-        test_serdeser_aux(&delta, 56);
+        test_serdeser_aux(&delta, 63);
     }
 
     #[test]

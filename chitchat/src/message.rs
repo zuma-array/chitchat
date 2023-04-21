@@ -130,7 +130,7 @@ mod tests {
             cluster_id: "cluster-a".to_string(),
             digest,
         };
-        test_serdeser_aux(&syn, 84);
+        test_serdeser_aux(&syn, 98);
     }
 
     #[test]

@@ -51,6 +51,9 @@ struct Opt {
     /// Defines the socket addr on which we should listen to.
     #[structopt(long = "listen_addr", default_value = "127.0.0.1:10000")]
     listen_addr: SocketAddr,
+    /// Defines the socket addr on which we should listen to.
+    #[structopt(long = "raft_listen_addr", default_value = "127.0.0.1:20000")]
+    raft_listen_addr: SocketAddr,
     /// Defines the socket_address (host:port) other servers should use to
     /// reach this server.
     ///
@@ -58,6 +61,13 @@ struct Opt {
     /// when all server are running on the same server.
     #[structopt(long = "public_addr")]
     public_addr: Option<SocketAddr>,
+    /// Defines the Raft socket_address (host:port) other servers should use to
+    /// reach this server.
+    ///
+    /// It defaults to the listen address, but this is only valid
+    /// when all server are running on the same server.
+    #[structopt(long = "raft_public_addr")]
+    raft_public_addr: Option<SocketAddr>,
 
     /// Node ID. Must be unique. If None, the node ID will be generated from
     /// the public_addr and a random suffix.
@@ -82,10 +92,11 @@ async fn main() -> anyhow::Result<()> {
     let opt = Opt::from_args();
     println!("{opt:?}");
     let public_addr = opt.public_addr.unwrap_or(opt.listen_addr);
+    let raft_addr = opt.raft_public_addr.unwrap_or(opt.raft_listen_addr);
     let node_id = opt
         .node_id
         .unwrap_or_else(|| generate_server_id(public_addr));
-    let chitchat_id = ChitchatId::new(node_id, 0, public_addr);
+    let chitchat_id = ChitchatId::new(node_id, 0, public_addr, raft_addr);
     let config = ChitchatConfig {
         cluster_id: "testing".to_string(),
         chitchat_id,

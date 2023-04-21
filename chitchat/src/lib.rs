@@ -66,14 +66,16 @@ pub struct ChitchatId {
     pub generation_id: u64,
     /// The socket address peers should use to gossip with the node.
     pub gossip_advertise_address: SocketAddr,
+    pub raft_advertise_address: SocketAddr,
 }
 
 impl ChitchatId {
-    pub fn new(node_id: String, generation_id: u64, gossip_advertise_address: SocketAddr) -> Self {
+    pub fn new(node_id: String, generation_id: u64, gossip_advertise_address: SocketAddr, raft_advertise_address: SocketAddr) -> Self {
         Self {
             node_id,
             generation_id,
             gossip_advertise_address,
+            raft_advertise_address,
         }
     }
 }
@@ -87,7 +89,7 @@ impl ChitchatId {
 
     /// Creates a new [`ChitchatId`] for local testing.
     pub fn for_local_test(port: u16) -> Self {
-        Self::new(format!("node-{port}"), 0, ([127, 0, 0, 1], port).into())
+        Self::new(format!("node-{port}"), 0, ([127, 0, 0, 1], port).into(), ([127, 0, 0, 1], port).into())
     }
 }
 

@@ -166,17 +166,20 @@ impl Serializable for ChitchatId {
     fn serialize(&self, buf: &mut Vec<u8>) {
         self.node_id.serialize(buf);
         self.generation_id.serialize(buf);
-        self.gossip_advertise_address.serialize(buf)
+        self.gossip_advertise_address.serialize(buf);
+        self.raft_advertise_address.serialize(buf)
     }
 
     fn deserialize(buf: &mut &[u8]) -> anyhow::Result<Self> {
         let node_id = String::deserialize(buf)?;
         let generation_id = u64::deserialize(buf)?;
         let gossip_public_address = SocketAddr::deserialize(buf)?;
+        let raft_public_address = SocketAddr::deserialize(buf)?;
         Ok(Self {
             node_id,
             generation_id,
             gossip_advertise_address: gossip_public_address,
+            raft_advertise_address:  raft_public_address,
         })
     }
 
@@ -184,6 +187,7 @@ impl Serializable for ChitchatId {
         self.node_id.serialized_len()
             + self.generation_id.serialized_len()
             + self.gossip_advertise_address.serialized_len()
+            + self.raft_advertise_address.serialized_len()
     }
 }
 
@@ -226,8 +230,8 @@ mod tests {
     #[test]
     fn test_serialize_chitchat_id() {
         test_serdeser_aux(
-            &ChitchatId::new("node-id".to_string(), 1, "127.0.0.1:7280".parse().unwrap()),
-            24,
+            &ChitchatId::new("node-id".to_string(), 1, "127.0.0.1:7280".parse().unwrap(), "127.0.0.1:7280".parse().unwrap()),
+            31,
         );
     }
 

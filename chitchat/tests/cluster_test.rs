@@ -238,6 +238,7 @@ pub fn create_chitchat_id(id: &str) -> ChitchatId {
         node_id: id.to_string(),
         generation_id: 0,
         gossip_advertise_address: ([127, 0, 0, 1], port).into(),
+        raft_advertise_address: ([127, 0, 0, 1], port).into(),
     }
 }
 

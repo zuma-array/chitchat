@@ -14,6 +14,7 @@ async fn spawn_one(chitchat_id: u16, transport: &dyn Transport) -> ChitchatHandl
         node_id: format!("node_{chitchat_id}"),
         generation_id: 0,
         gossip_advertise_address: listen_addr,
+        raft_advertise_address: listen_addr,
     };
     let gossip_interval = Duration::from_millis(300);
     let config = ChitchatConfig {
