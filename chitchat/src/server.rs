@@ -9,6 +9,7 @@ use tokio::sync::mpsc::{self, UnboundedReceiver, UnboundedSender};
 use tokio::sync::{watch, Mutex};
 use tokio::task::JoinHandle;
 use tokio::time;
+use tokio::time::MissedTickBehavior;
 use tracing::{debug, info, warn};
 
 use crate::message::ChitchatMessage;
@@ -207,6 +208,7 @@ impl Server {
     async fn run(&mut self) -> anyhow::Result<()> {
         let gossip_interval = self.chitchat.lock().await.config.gossip_interval;
         let mut gossip_interval = time::interval(gossip_interval);
+        gossip_interval.set_missed_tick_behavior(MissedTickBehavior::Skip);
         loop {
             tokio::select! {
                 result = self.transport.recv() => match result {
